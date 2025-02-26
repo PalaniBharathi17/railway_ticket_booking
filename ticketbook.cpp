@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 #include "passengers.cpp"
 
 using namespace std;
@@ -8,6 +9,7 @@ class TicketBook
 public:
     static int aLB;
     static int aMB;
+    
     static int aUB;
     static int aRAC;
     static int aWL;
@@ -101,6 +103,7 @@ public:
 
     void cancel(int cid)
     {
+        
         cout << "------------------------------CANCELLED SUCCESSFULLY\n";
 
         Passenger p = passenger_stored_data[cid];
@@ -113,6 +116,59 @@ public:
                 break;
             }
         }
+
+        int psnumber = p.number;
+
+        if(p.alloted=="L"){
+            lBP.push_back(psnumber);
+            aLB++;
+        }
+        else if(p.alloted=="M"){
+            mBP.push_back(psnumber);
+            aMB++;
+        }
+        else if(p.alloted=="U"){
+            uBP.push_back(psnumber);
+            aUB++;
+        }
+
+        if (racList.size() > 0)
+        {
+            Passenger passengerfromRAC = passenger_stored_data[racList.front()];
+           
+            racList.pop();
+            int pracnumber = passengerfromRAC.number;
+            aRAC++;
+            racBP.push_back(pracnumber);
+
+            if (wlList.size() > 0)
+            {
+                Passenger passengerfromWL = passenger_stored_data[wlList.front()];
+                int pwlnumber = passengerfromWL.number;
+                wlList.pop();
+                wlBP.push_back(pwlnumber);
+
+                passengerfromWL.number = racBP[0];
+                passengerfromWL.alloted = "RAC";
+                racBP.erase(racBP.begin());
+                racList.push(passengerfromWL.passengerid);
+               
+
+                aWL++;
+                aRAC--;
+            }
+           bookticket(passengerfromRAC, racBP[0], "RAC");
+        }
+
+        
+    }
+
+    void availabletickets(){
+        cout<<"Available Lower Berth : "<<aLB<<endl;
+        cout<<"Available Middle Berth : "<<aMB<<endl;
+        cout<<"Available Upper Berth : "<<aUB<<endl;
+        cout<<"Available RAC : "<<aRAC<<endl;
+        cout<<"Available Waiting List : "<<aWL<<endl;
     }
 };
 

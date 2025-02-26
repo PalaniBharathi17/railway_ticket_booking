@@ -10,11 +10,9 @@ void bookticket(Passenger &p)
     TicketBook tb;
 
     //---------------------------------------waitinglist-----------------------
-    if (TicketBook::aWL == 0)
-    {
-        cout << "No tickets Available\n";
-        return;
-    }
+    
+    
+   
 
     //----------------------------------BOOKING TICKET--------------------------
     if (((p.bp == "L")&& TicketBook::aLB > 0) || ((p.bp == "M ")&& TicketBook::aMB > 0) || ((p.bp == "U") && TicketBook::aUB > 0))
@@ -98,11 +96,12 @@ void cancelticket(int cid)
 int main()
 {
     bool loop = true;
+   
     while (loop)
     {
 
         cout << " 1.Book\n 2. Cancel\n 3.Available Tickets\n 4.Booked Tickets\n 5.Exit\n";
-
+        TicketBook tb;
         int choice;
         cin >> choice;
 
@@ -110,6 +109,12 @@ int main()
         {
         case 1:
         {
+            if (TicketBook::aWL == 0)
+            {
+                cout << "No tickets Available\n";
+                return 0;
+            }
+            else{
             cout << "Enter the passenger name : ";
             string name;
             getline(cin >> ws, name);
@@ -127,6 +132,7 @@ int main()
             Passenger p(name, age, gender, bp);
             bookticket(p);
             break;
+            }
         }
 
         case 2:
@@ -139,16 +145,20 @@ int main()
         case 3:
             
 
-            TicketBook tb;
+           
             tb.passengersdetail();
 
             break;
 
         case 4:
-          
+            tb.availabletickets();
             break;
         case 5:
             loop = false;
+            break;
+
+        default:
+            cout << "Invalid choice\n";
             break;
         }
     }
